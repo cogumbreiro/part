@@ -25,9 +25,9 @@ abstract class Node implements Serializable {
         else return n.minimum();
     }
 
-    public abstract boolean insert(ChildPtr ref, final byte[] key, Object value, int depth,
+    public abstract boolean insert(ChildPtr ref, final int[] key, Object value, int depth,
                                    boolean force_clone) throws UnsupportedOperationException;
-    public static boolean insert(Node n, ChildPtr ref, final byte[] key, Object value, int depth,
+    public static boolean insert(Node n, ChildPtr ref, final int[] key, Object value, int depth,
                                  boolean force_clone) {
         // If we are at a NULL node, inject a leaf
         if (n == null) {
@@ -38,7 +38,7 @@ abstract class Node implements Serializable {
         }
     }
 
-    public abstract boolean delete(ChildPtr ref, final byte[] key, int depth,
+    public abstract boolean delete(ChildPtr ref, final int[] key, int depth,
                                    boolean force_clone);
 
     public abstract int decrement_refcount();
@@ -47,10 +47,6 @@ abstract class Node implements Serializable {
     public static boolean exhausted(Node n, int i) {
         if (n == null) return true;
         else return n.exhausted(i);
-    }
-
-    static int to_uint(byte b) {
-        return ((int)b) & 0xFF;
     }
 
     int refcount;

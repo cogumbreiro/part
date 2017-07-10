@@ -5,9 +5,7 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import scala.Tuple2;
-
-class ArtIterator implements Iterator<Tuple2<byte[], Object>> {
+class ArtIterator implements Iterator<Pair<int[], Object>> {
     private Deque<Node> elemStack = new ArrayDeque<Node>();
     private Deque<Integer> idxStack = new ArrayDeque<Integer>();
 
@@ -23,17 +21,17 @@ class ArtIterator implements Iterator<Tuple2<byte[], Object>> {
         return !elemStack.isEmpty();
     }
 
-    @Override public Tuple2<byte[], Object> next() {
+    @Override public Pair<int[], Object> next() {
         if (hasNext()) {
             Leaf leaf = (Leaf)elemStack.peek();
-            byte[] key = leaf.key;
+            int[] key = leaf.key;
             Object value = leaf.value;
 
             // Mark the leaf as consumed
             idxStack.push(idxStack.pop() + 1);
 
             maybeAdvance();
-            return new Tuple2<byte[], Object>(key, value);
+            return new Pair<int[], Object>(key, value);
         } else {
             throw new NoSuchElementException("end of iterator");
         }

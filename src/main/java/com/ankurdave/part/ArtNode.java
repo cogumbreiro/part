@@ -18,7 +18,7 @@ abstract class ArtNode extends Node {
      * Returns the number of prefix characters shared between
      * the key and node.
      */
-    public int check_prefix(final byte[] key, int depth) {
+    public int check_prefix(final int[] key, int depth) {
         int max_cmp = Math.min(Math.min(partial_len, Node.MAX_PREFIX_LEN), key.length - depth);
         int idx;
         for (idx = 0; idx < max_cmp; idx++) {
@@ -31,7 +31,7 @@ abstract class ArtNode extends Node {
     /**
      * Calculates the index at which the prefixes mismatch
      */
-    public int prefix_mismatch(final byte[] key, int depth) {
+    public int prefix_mismatch(final int[] key, int depth) {
         int max_cmp = Math.min(Math.min(Node.MAX_PREFIX_LEN, partial_len), key.length - depth);
         int idx;
         for (idx = 0; idx < max_cmp; idx++) {
@@ -52,18 +52,18 @@ abstract class ArtNode extends Node {
         return idx;
     }
 
-    public abstract ChildPtr find_child(byte c);
+    public abstract ChildPtr find_child(int c);
 
-    public abstract void add_child(ChildPtr ref, byte c, Node child);
+    public abstract void add_child(ChildPtr ref, int c, Node child);
 
-    public abstract void remove_child(ChildPtr ref, byte c);
+    public abstract void remove_child(ChildPtr ref, int c);
 
     // Precondition: isLastChild(i) == false
     public abstract int nextChildAtOrAfter(int i);
 
     public abstract Node childAt(int i);
 
-    @Override public boolean insert(ChildPtr ref, final byte[] key, Object value,
+    @Override public boolean insert(ChildPtr ref, final int[] key, Object value,
                                     int depth, boolean force_clone) {
         boolean do_clone = force_clone || this.refcount > 1;
 
@@ -130,7 +130,7 @@ abstract class ArtNode extends Node {
         }
     }
 
-    @Override public boolean delete(ChildPtr ref, final byte[] key, int depth,
+    @Override public boolean delete(ChildPtr ref, final int[] key, int depth,
                                     boolean force_clone) {
         // Bail if the prefix does not match
         if (partial_len > 0) {
@@ -168,5 +168,5 @@ abstract class ArtNode extends Node {
 
     int num_children = 0;
     int partial_len = 0;
-    final byte[] partial = new byte[Node.MAX_PREFIX_LEN];
+    final int[] partial = new int[Node.MAX_PREFIX_LEN];
 }

@@ -28,7 +28,7 @@ class ArtNode256 extends ArtNode {
         // ArtNode256 from ArtNode48
         for (int i = 0; i < 256; i++) {
             if (other.keys[i] != 0) {
-                children[i] = other.children[to_uint(other.keys[i]) - 1];
+                children[i] = other.children[other.keys[i] - 1];
                 children[i].refcount++;
             }
         }
@@ -38,8 +38,8 @@ class ArtNode256 extends ArtNode {
         return new ArtNode256(this);
     }
 
-    @Override public ChildPtr find_child(byte c) {
-        if (children[to_uint(c)] != null) return new ArrayChildPtr(children, to_uint(c));
+    @Override public ChildPtr find_child(int c) {
+        if (children[c] != null) return new ArrayChildPtr(children, c);
         return null;
     }
 
@@ -49,19 +49,19 @@ class ArtNode256 extends ArtNode {
         return Node.minimum(children[idx]);
      }
 
-    @Override public void add_child(ChildPtr ref, byte c, Node child) {
+    @Override public void add_child(ChildPtr ref, int c, Node child) {
         assert(refcount <= 1);
 
         this.num_children++;
-        this.children[to_uint(c)] = child;
+        this.children[c] = child;
         child.refcount++;
     }
 
-    @Override public void remove_child(ChildPtr ref, byte c) {
+    @Override public void remove_child(ChildPtr ref, int c) {
         assert(refcount <= 1);
 
-        children[to_uint(c)].decrement_refcount();
-        children[to_uint(c)] = null;
+        children[c].decrement_refcount();
+        children[c] = null;
         num_children--;
 
         if (num_children == 37) {

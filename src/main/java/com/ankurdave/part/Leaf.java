@@ -3,7 +3,7 @@ package com.ankurdave.part;
 class Leaf extends Node {
     public static int count;
 
-    public Leaf(final byte[] key, Object value) {
+    public Leaf(final int[] key, Object value) {
         super();
         this.key = key;
         this.value = value;
@@ -21,7 +21,7 @@ class Leaf extends Node {
         return new Leaf(this);
     }
 
-    public boolean matches(final byte[] key) {
+    public boolean matches(final int[] key) {
         if (this.key.length != key.length) return false;
         for (int i = 0; i < key.length; i++) {
             if (this.key[i] != key[i]) {
@@ -31,7 +31,7 @@ class Leaf extends Node {
         return true;
     }
 
-    public boolean prefix_matches(final byte[] prefix) {
+    public boolean prefix_matches(final int[] prefix) {
         if (this.key.length < prefix.length) return false;
         for (int i = 0; i < prefix.length; i++) {
             if (this.key[i] != prefix[i]) {
@@ -56,7 +56,7 @@ class Leaf extends Node {
         return idx;
     }
 
-    @Override public boolean insert(ChildPtr ref, final byte[] key, Object value,
+    @Override public boolean insert(ChildPtr ref, final int[] key, Object value,
                                     int depth, boolean force_clone) throws UnsupportedOperationException {
         boolean clone = force_clone || this.refcount > 1;
         if (matches(key)) {
@@ -104,7 +104,7 @@ class Leaf extends Node {
         }
     }
 
-    @Override public boolean delete(ChildPtr ref, final byte[] key, int depth,
+    @Override public boolean delete(ChildPtr ref, final int[] key, int depth,
                                     boolean force_clone) {
         return matches(key);
     }
@@ -127,5 +127,5 @@ class Leaf extends Node {
     }
 
     Object value;
-    final byte[] key;
+    final int[] key;
 }

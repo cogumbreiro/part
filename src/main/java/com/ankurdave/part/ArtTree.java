@@ -3,8 +3,6 @@ package com.ankurdave.part;
 import java.io.Serializable;
 import java.util.Iterator;
 
-import scala.Tuple2;
-
 public class ArtTree extends ChildPtr implements Serializable {
     public ArtTree() { }
 
@@ -31,7 +29,7 @@ public class ArtTree extends ChildPtr implements Serializable {
         root = n;
     }
 
-    public Object search(final byte[] key) {
+    public Object search(final int[] key) {
         Node n = root;
         int prefix_len, depth = 0;
         while (n != null) {
@@ -66,11 +64,11 @@ public class ArtTree extends ChildPtr implements Serializable {
         return null;
     }
 
-    public void insert(final byte[] key, Object value) throws UnsupportedOperationException {
+    public void insert(final int[] key, Object value) throws UnsupportedOperationException {
         if (Node.insert(root, this, key, value, 0, false)) num_elements++;
     }
 
-    public void delete(final byte[] key) {
+    public void delete(final int[] key) {
         if (root != null) {
             boolean child_is_leaf = root instanceof Leaf;
             boolean do_delete = root.delete(this, key, 0, false);
@@ -84,11 +82,11 @@ public class ArtTree extends ChildPtr implements Serializable {
         }
     }
 
-    public Iterator<Tuple2<byte[], Object>> iterator() {
+    public Iterator<Pair<int[], Object>> iterator() {
         return new ArtIterator(root);
     }
 
-    public Iterator<Tuple2<byte[], Object>> prefixIterator(final byte[] prefix) {
+    public Iterator<Pair<int[], Object>> prefixIterator(final int[] prefix) {
         // Find the root node for the prefix
         Node n = root;
         int prefix_len, depth = 0;

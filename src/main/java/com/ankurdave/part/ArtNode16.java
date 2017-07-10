@@ -46,9 +46,9 @@ class ArtNode16 extends ArtNode {
         // ArtNode16 from ArtNode48
         int child = 0;
         for (int i = 0; i < 256; i++) {
-            int pos = to_uint(other.keys[i]);
+            int pos = other.keys[i];
             if (pos != 0) {
-                keys[child] = (byte)i;
+                keys[child] = i;
                 children[child] = other.children[pos - 1];
                 children[child].refcount++;
                 child++;
@@ -60,7 +60,7 @@ class ArtNode16 extends ArtNode {
         return new ArtNode16(this);
     }
 
-    @Override public ChildPtr find_child(byte c) {
+    @Override public ChildPtr find_child(int c) {
         // TODO: avoid linear search using intrinsics if available
         for (int i = 0; i < this.num_children; i++) {
             if (keys[i] == c) {
@@ -74,14 +74,14 @@ class ArtNode16 extends ArtNode {
         return Node.minimum(children[0]);
     }
 
-    @Override public void add_child(ChildPtr ref, byte c, Node child) {
+    @Override public void add_child(ChildPtr ref, int c, Node child) {
         assert(refcount <= 1);
 
         if (this.num_children < 16) {
             // TODO: avoid linear search using intrinsics if available
             int idx;
             for (idx = 0; idx < this.num_children; idx++) {
-                if (to_uint(c) < to_uint(keys[idx])) break;
+                if (c < keys[idx]) break;
             }
 
             // Shift to make room
@@ -103,7 +103,7 @@ class ArtNode16 extends ArtNode {
         }
     }
 
-    @Override public void remove_child(ChildPtr ref, byte c) {
+    @Override public void remove_child(ChildPtr ref, int c) {
         assert(refcount <= 1);
 
         int idx;
@@ -155,6 +155,6 @@ class ArtNode16 extends ArtNode {
         return 0;
     }
 
-    byte[] keys = new byte[16];
+    int[] keys = new int[16];
     Node[] children = new Node[16];
 }

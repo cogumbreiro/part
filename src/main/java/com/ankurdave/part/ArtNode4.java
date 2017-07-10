@@ -39,7 +39,7 @@ class ArtNode4 extends ArtNode {
         return new ArtNode4(this);
     }
 
-    @Override public ChildPtr find_child(byte c) {
+    @Override public ChildPtr find_child(int c) {
         for (int i = 0; i < this.num_children; i++) {
             if (keys[i] == c) {
                 return new ArrayChildPtr(children, i);
@@ -52,13 +52,13 @@ class ArtNode4 extends ArtNode {
         return Node.minimum(children[0]);
     }
 
-    @Override public void add_child(ChildPtr ref, byte c, Node child) {
+    @Override public void add_child(ChildPtr ref, int c, Node child) {
         assert(refcount <= 1);
 
         if (this.num_children < 4) {
             int idx;
             for (idx = 0; idx < this.num_children; idx++) {
-                if (to_uint(c) < to_uint(keys[idx])) break;
+                if (c < keys[idx]) break;
             }
 
             // Shift to make room
@@ -80,7 +80,7 @@ class ArtNode4 extends ArtNode {
         }
     }
 
-    @Override public void remove_child(ChildPtr ref, byte c) {
+    @Override public void remove_child(ChildPtr ref, int c) {
         assert(refcount <= 1);
 
         int idx;
@@ -156,6 +156,6 @@ class ArtNode4 extends ArtNode {
         return 0;
     }
 
-    byte[] keys = new byte[4];
+    int[] keys = new int[4];
     Node[] children = new Node[4];
 }
